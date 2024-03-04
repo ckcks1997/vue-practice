@@ -25,6 +25,7 @@ export default {
   props:{
     data:Array,
   },
+  emits:['searchMovie'],
   watch: {
     inputText(name){
       const findName = this.data.filter(movie =>{

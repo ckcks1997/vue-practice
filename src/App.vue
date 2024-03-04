@@ -2,11 +2,14 @@
 <!--Navbar-->
   <Navbar/>
 
-  <Event :text="text" />
+  <Event :text="text[eventTextNum]" />
   <Searchbar
       :data="data_temp"
       @searchMovie="searchMovie($event)"
   />
+  <p>
+    <button @click="showAllMovie">전체보기</button>
+  </p>
 <!--body contents-->
   <Movies
     :data="data_temp"
@@ -41,17 +44,27 @@ console.log(data)
         selectedMovie: 0,
         data: data,
         data_temp: [...data],
-        text: "NEPLIX 강렬한 운명의 드라마, 경기크리처"
+        text: ["NEPLIX 강렬한 운명의 드라마, 경기크리처", "디즈니 100주년 기념작, 위시"],
+        eventTextNum: 0,
+        interval: null,
       }
     },
     methods:{
       increaseLike(i){
-        this.data[i].like += 1;
+        //this.data[i].like += 1;
+        this.data.find(movie =>{
+          if(movie.id == i){
+            movie.like +=1;
+          }
+        })
       },
       searchMovie(title){
         this.data_temp = this.data.filter(movie =>{
           return movie.title.includes(title);
         })
+      },
+      showAllMovie(){
+        this.data_temp = [...this.data];
       }
     },
     components:{
@@ -60,6 +73,20 @@ console.log(data)
       Event: Event,
       Movies: Movies,
       Modal: Modal,
+    },
+    mounted() {
+      console.log('mounted');
+      this.interval = setInterval(()=>{
+        if(this.eventTextNum == this.text.length-1){
+          this.eventTextNum = 0;
+        }else {
+          this.eventTextNum += 1;
+        }
+      }, 3000)
+    },
+    unmounted() {
+      console.log("unmounted")
+      clearInterval(this.interval);
     }
   }
 </script>
