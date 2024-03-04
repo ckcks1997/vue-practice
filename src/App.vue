@@ -1,22 +1,18 @@
 <template>
 <!--Navbar-->
   <Navbar/>
+
+  <Event :text="text" />
+  <Searchbar
+      :data="data_temp"
+      @searchMovie="searchMovie($event)"
+  />
 <!--body contents-->
-  <h1>영화정보</h1>
-  <div v-for="(movie, i) in data" :key="i" class="item">
-    <figure>
-      <img :src="movie.imgUrl" alt="">
-    </figure>
-    <div class="info">
-      <h3 class="bg-yellow" :style="data[0].textRed">{{movie.title}}</h3>
-      <p>개봉: {{movie.year}}</p>
-      <p>장르: {{movie.category}}</p>
-      <button @:click="increaseLike(i)">좋아요</button> <span>{{movie.like}}</span>
-      <p>
-        <button @click="isModal=true; selectedMovie=i">상세</button>
-      </p>
-    </div>
-  </div>
+  <Movies
+    :data="data_temp"
+    @openModal="isModal=true; selectedMovie=$event"
+    @increaseLike="increaseLike($event)"
+  />
 
 <!--Modal 컴포넌트-->
   <Modal
@@ -28,9 +24,12 @@
 </template>
 
 <script>
-import {data} from './assets/movies.js'
-import Navbar from './components/Navbar.vue'
-import Modal from './components/Modal.vue'
+import {data} from '../public/assets/movies.js';
+import Navbar from './components/Navbar.vue';
+import Searchbar from './components/Searchbar.vue';
+import Event from './components/Event.vue';
+import Movies from './components/Movies.vue';
+import Modal from './components/Modal.vue';
 console.log(data)
 
   export default {
@@ -40,16 +39,26 @@ console.log(data)
         isModal: false,
         foods: ['김밥', '순대', '만두'],
         selectedMovie: 0,
-        data: data
+        data: data,
+        data_temp: [...data],
+        text: "NEPLIX 강렬한 운명의 드라마, 경기크리처"
       }
     },
     methods:{
       increaseLike(i){
         this.data[i].like += 1;
+      },
+      searchMovie(title){
+        this.data_temp = this.data.filter(movie =>{
+          return movie.title.includes(title);
+        })
       }
     },
     components:{
       Navbar: Navbar,
+      Searchbar: Searchbar,
+      Event: Event,
+      Movies: Movies,
       Modal: Modal,
     }
   }
@@ -64,7 +73,6 @@ console.log(data)
 body {
   max-width: 768px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 h1,

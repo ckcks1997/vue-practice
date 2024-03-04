@@ -13,7 +13,8 @@ let data= [
         title: '노량2',
         year: 2024,
         category: 'action',
-        like:0
+        like:0,
+        imgUrl:'/assets/logo.png'
     }
 ]
 

@@ -1,5 +1,5 @@
 <template>
-<nav>
+<nav class="navbar">
   <a href="#">Home</a>
   <a href="#">Movies</a>
   <a href="#">About</a>
